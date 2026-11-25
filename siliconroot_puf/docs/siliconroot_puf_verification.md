@@ -33,6 +33,7 @@ The delivered design was compiled, simulated, linted, synthesised and mutation-t
 | TC-16 | both lint configurations exited 0 | `lint/lint.log`, `lint/lint_no_rtl_sim.log` | PASS |
 | TC-17 | hierarchy check reported 0 problems | `synth/synth.log` | PASS |
 | TC-18 | all 29 injected faults were detected | `mut/mutation_results.json` | PASS |
+| TC-19 | all seven regression stages passed from a clean copy | `regression_summary.json` | PASS |
 
 Measured longest command latencies are 1 cycle for control operations and reference stores, 4293 cycles for an arbiter response, 4296 cycles for arbiter authentication, 1348 cycles for RO enrolment, 801 cycles for RO regeneration and 263 cycles for RO authentication.
 
@@ -52,6 +53,24 @@ Measured longest command latencies are 1 cycle for control operations and refere
 
 `fpv/siliconroot_puf_fpv.sv` compiles under Icarus 12.0 with `+define+INCLUDE_FPV` for all three property modules: `puf_top_props`, `puf_auth_props` and `puf_bch_dec_props`. Icarus emits synthesis-only warnings for the implicit `$error` calls behind immediate assertions; these do not affect simulation. The properties are not instantiated by the delivered RTL and no proof harness or `.sby` file is shipped, so no formal proof is claimed.
 
-## 7. Limitations
+## 7. Repeatable regression suite
+
+The executable checks above are collected in `tools/regression.py`, a
+standard-library-only Python runner that uses Icarus Verilog and Yosys. It
+copies the tree into a disposable work directory, runs the seven stages
+(`kat`, `lint`, `sim`, `fpv`, `synth`, `mutation`, `monitor`), writes raw logs
+plus `regression_summary.json`, and exits non-zero if any gate fails:
+
+```bash
+python3 tools/regression.py --root . --work build/regression
+```
+
+`.github/workflows/regression.yml` runs that command on every push and pull
+request using Ubuntu's open-source `iverilog` and `yosys` packages and uploads
+the work directory as the `regression-report` artifact. The local full run
+passed all seven stages in 177.6 s: synthesis took 60.3 s and the mutation
+campaign 112.2 s.
+
+## 8. Limitations
 
 These are declared scope limits, not executable failures. The two PUF macros are calibrated functional twins, not silicon measurements. The RO challenge space is 512 rotations rather than the paper's exponential subset space. References are held on chip and the mask uses `k = 4`. CDC is inapplicable because the block has one clock and one asynchronous reset; the review is recorded in `cdc/cdc.rpt`. No place-and-route, static timing analysis, gate-level simulation or Fmax figure exists. Formal properties were written and syntax-checked but not proven. Physical attacks and side-channel resistance were not evaluated.

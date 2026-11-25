@@ -1,0 +1,56 @@
+name: Regression
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  open-source-regression:
+    name: Open-source regression suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install open-source toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog yosys
+
+      - name: Tool versions
+        run: |
+          python3 --version
+          iverilog -V | sed -n '1p'
+          yosys -V
+
+      - name: Run regression suite
+        run: python3 tools/regression.py --root . --work build/regression
+        env:
+          YOSYS: yosys
+
+      - name: Upload regression artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-report
+          path: build/regression/
+          if-no-files-found: warn
+
+      - name: Summarize result
+        if: always()
+        run: |
+          if [ -f build/regression/regression_summary.json ]; then
+            python3 - <<'PY'
+          import json
+          with open('build/regression/regression_summary.json') as f:
+              s = json.load(f)
+          print('Regression result:', s['result'])
+          for r in s['stages']:
+              print('  %-4s %-9s %s' % (r['status'], r['stage'], r['detail']))
+          PY
+          fi

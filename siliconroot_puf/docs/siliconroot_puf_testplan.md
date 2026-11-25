@@ -37,6 +37,7 @@ Three independent stimulus sources are used. Known-answer vectors come from `sim
 | TC-16 | Lint is clean with and without `RTL_SIM` | both file lists | `iverilog -Wall -g2012` | DONE |
 | TC-17 | The design elaborates and checks cleanly | twelve RTL sources in dependency order | `yosys check` | DONE |
 | TC-18 | The testbench detects injected faults | 29 one-line RTL mutants | mutation campaign | DONE |
+| TC-19 | The regression suite gates every flow from a clean copy | `tools/regression.py` full run | seven stages pass | DONE |
 
 ## 4. Exit criteria
 

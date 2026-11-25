@@ -437,7 +437,7 @@ These compile only when `` `INCLUDE_FPV `` is defined, as a run separate from si
 * `fpv/siliconroot_puf_fpv.sv` - `puf_auth_props/a_dist_bound`: the reported distance never exceeds the response length.
 * `fpv/siliconroot_puf_fpv.sv` - `puf_bch_dec_props/a_fail_on_overflow`: the decoder raises `fail_o` when the locator degree exceeds the correction radius.
 
-They compile with `iverilog -g2012 -D INCLUDE_FPV`, but they are **not attached to the delivered RTL and no proof harness is shipped**. The simulation-side monitors of `siliconroot_puf_testplan.md` check the same rules dynamically over the traffic actually driven; proof of the rules over all reachable states is recorded as not covered in `siliconroot_puf_verification.md` section 7.
+They compile with `iverilog -g2012 -D INCLUDE_FPV`, but they are **not attached to the delivered RTL and no proof harness is shipped**. The simulation-side monitors of `siliconroot_puf_testplan.md` check the same rules dynamically over the traffic actually driven; proof of the rules over all reachable states is recorded as not covered in `siliconroot_puf_verification.md` section 8.
 
 ---
 
@@ -471,3 +471,6 @@ They compile with `iverilog -g2012 -D INCLUDE_FPV`, but they are **not attached 
 | `docs/siliconroot_puf_verification.md` | the verification report |
 | `docs/siliconroot_puf_features.md` | the implemented-feature checklist |
 | `cdc/cdc.rpt` | the single-clock CDC review |
+| `mut/run_mutations.py`, `mut/mutation_results.json` | the mutation campaign and its evidence |
+| `tools/regression.py`, `tools/README.md` | the repeatable open-source regression gate |
+| `.github/workflows/regression.yml` | CI runner for the full regression suite |

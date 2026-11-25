@@ -1,0 +1,7 @@
+# Regression scratch and generated artifacts
+build/
+__pycache__/
+*.pyc
+*.vcd
+my_sim_exe
+a.out
