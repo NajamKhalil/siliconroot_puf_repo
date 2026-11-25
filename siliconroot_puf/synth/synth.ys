@@ -1,0 +1,45 @@
+# Synthesis script for SiliconRoot-PUF, the PUF device authentication and key
+# generation block.
+#
+# Run from the block root:
+#     yowasp-yosys -s synth/synth.ys -l synth/synth.log
+#
+# The twelve sources are read in dependency order. Every package reference in
+# the tree uses the explicit `puf_pkg::name` scope resolution rather than a
+# wildcard import, because this synthesis flow cannot elaborate the imported
+# form. That is why the package comes first and nothing else has to follow it.
+read_verilog -sv rtl/puf_pkg.sv
+read_verilog -sv rtl/puf_prng.sv
+read_verilog -sv rtl/puf_sha256.sv
+read_verilog -sv rtl/puf_bch_enc.sv
+read_verilog -sv rtl/puf_bch_dec.sv
+read_verilog -sv rtl/puf_auth.sv
+read_verilog -sv rtl/puf_key_gen.sv
+read_verilog -sv rtl/puf_ro_macro.sv
+read_verilog -sv rtl/puf_ro_sensor.sv
+read_verilog -sv rtl/puf_arbiter_macro.sv
+read_verilog -sv rtl/puf_arbiter_puf.sv
+read_verilog -sv rtl/siliconroot_puf.sv
+
+# The hierarchy check turns an illegal parameter combination into a hard
+# error here rather than into a strange netlist later on.
+hierarchy -top siliconroot_puf -check
+
+# Coarse and fine synthesis of the whole hierarchy into the generic gate
+# library. The built-in ABC step is skipped with -noabc: its default script
+# does not finish inside the WebAssembly runtime used on this host. The ABC
+# step is then run by hand below, module by module, with a script that does.
+synth -top siliconroot_puf -noabc
+
+# ABC technology mapping of every module except the RO macro twin. The twin
+# carries 41964 cells and the runtime runs out of memory while its gate
+# netlist is extracted, so it is delivered in the generic gate library that
+# the rest of the design uses as well. Every other module is mapped.
+abc -g simple -script "+strash;dc2;map" siliconroot_puf puf_sha256 puf_bch_dec puf_bch_enc puf_prng puf_arbiter_macro *puf_ro_sensor *puf_arbiter_puf* *puf_key_gen* *puf_auth
+
+# Structural check and the cell census that the verification report quotes.
+check
+stat
+
+# The mapped netlist, for a downstream flow that wants a gate-level start.
+write_verilog -noattr synth/siliconroot_puf_netlist.v

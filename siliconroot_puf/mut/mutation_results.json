@@ -1,0 +1,298 @@
+{
+  "mutants": 29,
+  "killed": 28,
+  "survived": 1,
+  "wall_seconds": 86.6,
+  "results": [
+    {
+      "id": "M01",
+      "desc": "gf_mul reduces with x^7+x^3+x+1 instead of x^7+x^3+1",
+      "file": "puf_pkg.sv",
+      "status": "SURVIVED",
+      "first_failure": "",
+      "verdict": "PASS",
+      "mismatches": 0,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M02",
+      "desc": "gf_sqr drops the a[6] term of the squared bit 1",
+      "file": "puf_pkg.sv",
+      "status": "KILLED",
+      "first_failure": "the decoder returned the original word",
+      "verdict": "FAIL",
+      "mismatches": 20,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M03",
+      "desc": "the minimal polynomial of cyclotomic class 0 is corrupted",
+      "file": "puf_pkg.sv",
+      "status": "KILLED",
+      "first_failure": "the decoder returned the original word",
+      "verdict": "FAIL",
+      "mismatches": 18,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M04",
+      "desc": "the Chien search multiplier alpha^-1 is wrong",
+      "file": "puf_pkg.sv",
+      "status": "KILLED",
+      "first_failure": "the decoder returned the original word",
+      "verdict": "FAIL",
+      "mismatches": 20,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M05",
+      "desc": "the first SHA-256 round constant is corrupted",
+      "file": "puf_pkg.sv",
+      "status": "KILLED",
+      "first_failure": "RTL SHA-256 of abc",
+      "verdict": "FAIL",
+      "mismatches": 10,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M06",
+      "desc": "the first SHA-256 initial hash value is corrupted",
+      "file": "puf_pkg.sv",
+      "status": "KILLED",
+      "first_failure": "RTL SHA-256 of abc",
+      "verdict": "FAIL",
+      "mismatches": 10,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M07",
+      "desc": "the schedule sigma0 shifts by 2 instead of 3",
+      "file": "puf_sha256.sv",
+      "status": "KILLED",
+      "first_failure": "RTL SHA-256 of abc",
+      "verdict": "FAIL",
+      "mismatches": 10,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M08",
+      "desc": "the round Sigma1 rotates by 24 instead of 25",
+      "file": "puf_sha256.sv",
+      "status": "KILLED",
+      "first_failure": "RTL SHA-256 of abc",
+      "verdict": "FAIL",
+      "mismatches": 10,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M09",
+      "desc": "the message block is loaded little endian instead of big endian",
+      "file": "puf_sha256.sv",
+      "status": "KILLED",
+      "first_failure": "RTL SHA-256 of abc",
+      "verdict": "FAIL",
+      "mismatches": 10,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M10",
+      "desc": "the hash stops after 62 rounds instead of 64",
+      "file": "puf_sha256.sv",
+      "status": "KILLED",
+      "first_failure": "RTL SHA-256 of abc",
+      "verdict": "FAIL",
+      "mismatches": 10,
+      "finish_ps": 544940000
+    },
+    {
+      "id": "M11",
+      "desc": "the syndrome is computed from the word least significant bit first",
+      "file": "puf_bch_enc.sv",
+      "status": "KILLED",
+      "first_failure": "the RTL syndrome matches the golden model",
+      "verdict": "FAIL",
+      "mismatches": 12,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M12",
+      "desc": "the long division feedback constant is corrupted by one bit",
+      "file": "puf_bch_enc.sv",
+      "status": "KILLED",
+      "first_failure": "the RTL syndrome matches the golden model",
+      "verdict": "FAIL",
+      "mismatches": 16,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M13",
+      "desc": "the decoder no longer fails when the verification pass disagrees",
+      "file": "puf_bch_dec.sv",
+      "status": "KILLED",
+      "first_failure": "eleven errors are flagged",
+      "verdict": "FAIL",
+      "mismatches": 1,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M14",
+      "desc": "the Chien search records no error positions",
+      "file": "puf_bch_dec.sv",
+      "status": "KILLED",
+      "first_failure": "the decoder returned the original word",
+      "verdict": "FAIL",
+      "mismatches": 14,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M15",
+      "desc": "the tolerance is exclusive instead of inclusive",
+      "file": "puf_auth.sv",
+      "status": "KILLED",
+      "first_failure": "a distance inside the tolerance authenticates",
+      "verdict": "FAIL",
+      "mismatches": 1,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M16",
+      "desc": "the differing bits are computed with AND instead of XOR",
+      "file": "puf_auth.sv",
+      "status": "KILLED",
+      "first_failure": "the comparator counted the differing bits",
+      "verdict": "FAIL",
+      "mismatches": 19,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M17",
+      "desc": "the LFSR feedback polynomial is x^4+x^3+x^2+1 instead of x^4+x^3+x+1",
+      "file": "puf_prng.sv",
+      "status": "KILLED",
+      "first_failure": "the prng stepped",
+      "verdict": "FAIL",
+      "mismatches": 12,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M18",
+      "desc": "the all zero seed is no longer replaced by one",
+      "file": "puf_prng.sv",
+      "status": "KILLED",
+      "first_failure": "the prng replaced the zero seed",
+      "verdict": "FAIL",
+      "mismatches": 1,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M19",
+      "desc": "the 1-out-of-k mask picks the narrowest candidate instead of the widest",
+      "file": "puf_ro_sensor.sv",
+      "status": "KILLED",
+      "first_failure": "the RO response matches the model",
+      "verdict": "FAIL",
+      "mismatches": 40,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M20",
+      "desc": "the challenge rotation is off by one pair",
+      "file": "puf_ro_sensor.sv",
+      "status": "KILLED",
+      "first_failure": "the RO response matches the model",
+      "verdict": "FAIL",
+      "mismatches": 32,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M21",
+      "desc": "the SHA-256 padding loses its mandatory one bit",
+      "file": "puf_key_gen.sv",
+      "status": "KILLED",
+      "first_failure": "the derived key matches the golden hash",
+      "verdict": "FAIL",
+      "mismatches": 8,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M22",
+      "desc": "the hashed message length field is off by one",
+      "file": "puf_key_gen.sv",
+      "status": "KILLED",
+      "first_failure": "the derived key matches the golden hash",
+      "verdict": "FAIL",
+      "mismatches": 8,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M23",
+      "desc": "the authentication challenge is ignored and the rotation is zero",
+      "file": "siliconroot_puf.sv",
+      "status": "KILLED",
+      "first_failure": "the RO PUF authenticates against its reference",
+      "verdict": "FAIL",
+      "mismatches": 4,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M24",
+      "desc": "an unknown command reports the decode-failed status instead of the bad command status",
+      "file": "siliconroot_puf.sv",
+      "status": "KILLED",
+      "first_failure": "an unknown command reports the bad command status",
+      "verdict": "FAIL",
+      "mismatches": 1,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M25",
+      "desc": "the live reduction step of gf_mul folds with the wrong polynomial",
+      "file": "puf_pkg.sv",
+      "status": "KILLED",
+      "first_failure": "the decoder returned the original word",
+      "verdict": "FAIL",
+      "mismatches": 20,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M26",
+      "desc": "the prefix parity of the delay chain never toggles",
+      "file": "puf_arbiter_macro.sv",
+      "status": "KILLED",
+      "first_failure": "the arbiter response matches the model",
+      "verdict": "FAIL",
+      "mismatches": 5,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M27",
+      "desc": "the block never asserts cmd_ready_o while it is idle",
+      "file": "siliconroot_puf.sv",
+      "status": "KILLED",
+      "first_failure": "cmd_ready_o is high while the block is idle",
+      "verdict": "FAIL",
+      "mismatches": 54471,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M28",
+      "desc": "the arbiter verdict is inverted",
+      "file": "puf_arbiter_macro.sv",
+      "status": "KILLED",
+      "first_failure": "the arbiter response matches the model",
+      "verdict": "FAIL",
+      "mismatches": 5,
+      "finish_ps": 545110000
+    },
+    {
+      "id": "M29",
+      "desc": "the stored syndrome is not differenced out of the fresh one",
+      "file": "puf_key_gen.sv",
+      "status": "KILLED",
+      "first_failure": "the regeneration did not raise an error",
+      "verdict": "FAIL",
+      "mismatches": 1,
+      "finish_ps": 545110000
+    }
+  ]
+}

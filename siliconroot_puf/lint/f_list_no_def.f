@@ -1,0 +1,12 @@
+../rtl/puf_pkg.sv
+../rtl/puf_prng.sv
+../rtl/puf_sha256.sv
+../rtl/puf_bch_enc.sv
+../rtl/puf_bch_dec.sv
+../rtl/puf_auth.sv
+../rtl/puf_key_gen.sv
+../rtl/puf_ro_macro.sv
+../rtl/puf_ro_sensor.sv
+../rtl/puf_arbiter_macro.sv
+../rtl/puf_arbiter_puf.sv
+../rtl/siliconroot_puf.sv

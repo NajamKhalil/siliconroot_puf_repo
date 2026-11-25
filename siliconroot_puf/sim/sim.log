@@ -1,0 +1,42 @@
+INFO      the PUF device authentication testbench
+INFO      known answer file = kat_vectors.txt
+INFO      vectors: 8 RO, 5 arbiter, 5 syndrome
+INFO      RO distance after the environment change = 0 bits
+INFO      RO distance between two devices = 49 bits
+-------------------------------------
+- Report Phase
+-------------------------------------
+MATCH      COUNTER     = 175
+MISS MATCH COUNTER     = 0
+
+STIMULUS
+  RO known answers       = 8
+  arbiter known answers  = 5
+  syndrome known answers = 5
+  checks performed       = 175
+  checks matched         = 175
+  checks mismatched      = 0
+  handshake observations = 54501
+  handshake violations   = 0
+
+LATENCY (cycles, longest run per command)
+  nop                    = 1 over 1 run(s)
+  arbiter response       = 4293 over 6 run(s)
+  arbiter authenticate   = 4296 over 1 run(s)
+  RO enrol               = 1348 over 14 run(s)
+  RO regenerate          = 801 over 1 run(s)
+  RO authenticate        = 263 over 3 run(s)
+  arbiter ref store      = 1 over 1 run(s)
+  RO ref store           = 1 over 3 run(s)
+
+GATES                        have   need   ok
+  RO known answers          8      8   yes
+  arbiter known answers     5      5   yes
+  syndrome known answers    5      5   yes
+  mismatches                0      0   yes
+  handshake violations      0      0   yes
+
+RESULT                 = PASS
+tb_siliconroot_puf.sv:1172: $finish called at 545110000 (1ps)
+
+exit status: compile 0, run 0
