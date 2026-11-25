@@ -268,7 +268,7 @@ def find_lines(patterns, lines, skip=()):
 
 
 def unmark(cell):
-    """Strip markdown emphasis off a table cell.
+    """Strip emphasis markers off a table cell.
 
     Underscores are left alone on purpose: `num_vld` and `always_ff` are
     identifiers, and a table of RTL checks is full of them.
