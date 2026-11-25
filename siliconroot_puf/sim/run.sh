@@ -46,7 +46,7 @@ error () {
 # -------------------------------
 # Main Code
 # -------------------------------
-if [[ "$#" -ne 1  ||  "$#" -ne 2  ]]; then
+if [[ "$#" -lt 1 || "$#" -gt 2 ]]; then
   if [[ $1 == "-clean" ]]; then
     cleaning_func
   elif [[ $1 == "-h" || $1 == "--help" ]]; then
@@ -72,7 +72,7 @@ if [[ "$#" -ne 1  ||  "$#" -ne 2  ]]; then
       echo "-------------------------------"
       echo "- Running Simulation"
       echo "-------------------------------"
-      vvp my_sim_exe
+      vvp my_sim_exe +kat=kat_vectors.txt +dump
       echo "-------------------------------"
       echo "- Opening Wave"
       echo "-------------------------------"
@@ -86,7 +86,7 @@ if [[ "$#" -ne 1  ||  "$#" -ne 2  ]]; then
       echo "-------------------------------"
       echo "Running in dumping mode"
       echo "-------------------------------"
-      vvp my_sim_exe
+      vvp my_sim_exe +kat=kat_vectors.txt +dump
     elif [[ $2 == "-compile" ]]; then
       cleaning_func
       echo "-------------------------------"

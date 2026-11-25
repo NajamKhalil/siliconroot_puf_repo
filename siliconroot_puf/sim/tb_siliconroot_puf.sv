@@ -437,6 +437,41 @@ module tb_siliconroot_puf;
     end
   endfunction
 
+  // Independent GF(2^7) product. The RTL writes its reduction out as seven
+  // shifted XORs; this model uses a loop and x^7 = x^3 + 1. Checking every
+  // pair catches a corrupted fold constant even when the decoder traffic
+  // happens not to exercise that bit position.
+  function automatic logic [6:0] tb_gf_mul(input logic [6:0] a, input logic [6:0] b);
+    logic [13:0] p;
+    begin
+      p = 14'd0;
+      for (int i = 0; i < 7; i++) begin
+        if (b[i]) p = p ^ ({7'd0, a} << i);
+      end
+      for (int i = 13; i >= 7; i--) begin
+        if (p[i]) p = p ^ (14'h089 << (i - 7));
+      end
+      tb_gf_mul = p[6:0];
+    end
+  endfunction
+
+  task automatic test_gf_field_mul;
+    logic [6:0] aa;
+    logic [6:0] bb;
+    logic       ok;
+    begin
+      ok = 1'b1;
+      for (int ai = 0; ai < 128; ai++) begin
+        for (int bi = 0; bi < 128; bi++) begin
+          aa = 7'(ai);
+          bb = 7'(bi);
+          if (puf_pkg::gf_mul(aa, bb) != tb_gf_mul(aa, bb)) ok = 1'b0;
+        end
+      end
+      check(ok, "gf_mul matches the field product over all 128x128 pairs");
+    end
+  endtask
+
   function automatic logic [63:0] tb_rand(input logic [63:0] s);
     logic [63:0] x;
     begin
@@ -1113,6 +1148,7 @@ module tb_siliconroot_puf;
     check(n_arb > 0, "the arbiter vectors were read");
     check(n_syn > 0, "the syndrome vectors were read");
 
+    test_gf_field_mul;
     test_sha_kat;
     test_prng_kat;
     test_bch_encoder;

@@ -378,7 +378,7 @@ There is no initialisation walk and none is required: the block has no memory to
 
 ## 10. Synthesis notes
 
-Both lint configurations and the synthesis run are clean. `iverilog -Wall -g2012` reports **0 errors**; the diagnostics it does emit are all of one class and all of them sit in `RTL_SIM`-guarded simulation-only checks. `yowasp-yosys` 0.69 reports `Found and reported 0 problems.` and infers **0 latches** - the numbers are in section 6 of `siliconroot_puf_verification.md`.
+Both lint configurations and the synthesis run are clean. `iverilog -Wall -g2012` reports **0 errors**; the diagnostics it does emit are all of one class and all of them sit in `RTL_SIM`-guarded simulation-only checks. `yowasp-yosys` 0.71 reports `Found and reported 0 problems.` and infers **0 latches** - the numbers are in section 6 of `siliconroot_puf_verification.md`.
 
 * Plain synchronous RTL against a single asynchronous active-low reset (section 9).
 * No `initial` blocks for value initialisation anywhere in the RTL (section 9).
@@ -431,13 +431,13 @@ The parameter-edge matrix that exercises these rules is in section 5.1 of `silic
 
 These compile only when `` `INCLUDE_FPV `` is defined, as a run separate from simulation; none of them is part of the delivered gates:
 
-* `rtl/siliconroot_puf.sv` - `a_cmd_held`: a command may not be withdrawn or changed between `cmd_valid_i` and the acceptance edge, and `cmd_ready_o` may not rise again before `done_o`.
-* `rtl/siliconroot_puf.sv` - `a_done_pulse`: `done_o` is a one-cycle pulse, and it may only rise out of `S_FIN`.
-* `rtl/siliconroot_puf.sv` - `a_no_start_while_busy`: none of the four start signals may be asserted while the sequencer is not in the state that owns it.
-* `rtl/puf_auth.sv` - `a_dist_bound`: the reported distance never exceeds the response length.
-* `rtl/puf_bch_dec.sv` - `a_fail_on_overflow`: the decoder raises `fail_o` when the locator degree exceeds the correction radius.
+* `fpv/siliconroot_puf_fpv.sv` - `puf_top_props/a_cmd_held`: a command may not be withdrawn or changed between `cmd_valid_i` and the acceptance edge, and `cmd_ready_o` may not rise again before `done_o`.
+* `fpv/siliconroot_puf_fpv.sv` - `puf_top_props/a_done_pulse`: `done_o` is a one-cycle pulse, and it may only rise out of `S_FIN`.
+* `fpv/siliconroot_puf_fpv.sv` - `puf_top_props/a_no_start_while_busy`: none of the four start signals may be asserted while the sequencer is not in the state that owns it.
+* `fpv/siliconroot_puf_fpv.sv` - `puf_auth_props/a_dist_bound`: the reported distance never exceeds the response length.
+* `fpv/siliconroot_puf_fpv.sv` - `puf_bch_dec_props/a_fail_on_overflow`: the decoder raises `fail_o` when the locator degree exceeds the correction radius.
 
-They are written but **not run**: no formal tool is installed on this host, and `fpv/` holds the properties only. The simulation-side monitors of `siliconroot_puf_testplan.md` section 1.3 check the same rules dynamically over the traffic actually driven; proof of the rules over all reachable states is recorded as not covered in `siliconroot_puf_verification.md` section 7.
+They compile with `iverilog -g2012 -D INCLUDE_FPV`, but they are **not attached to the delivered RTL and no proof harness is shipped**. The simulation-side monitors of `siliconroot_puf_testplan.md` check the same rules dynamically over the traffic actually driven; proof of the rules over all reachable states is recorded as not covered in `siliconroot_puf_verification.md` section 7.
 
 ---
 
@@ -469,3 +469,5 @@ They are written but **not run**: no formal tool is installed on this host, and 
 | `docs/siliconroot_puf_design_spec.md` | this document |
 | `docs/siliconroot_puf_testplan.md` | the test plan |
 | `docs/siliconroot_puf_verification.md` | the verification report |
+| `docs/siliconroot_puf_features.md` | the implemented-feature checklist |
+| `cdc/cdc.rpt` | the single-clock CDC review |

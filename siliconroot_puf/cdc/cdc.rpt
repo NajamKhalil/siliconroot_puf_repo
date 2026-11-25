@@ -1,0 +1,9 @@
+# SiliconRoot-PUF - Clock Domain Crossing Review
+
+Scope: the complete `siliconroot_puf` RTL hierarchy.
+
+The block has one clock input, `clk_i`, and one asynchronous active-low reset, `rst_ni`. Every sequential element in the elaborated hierarchy is clocked by `clk_i` and asynchronously cleared by `rst_ni`. There are no generated clocks, no multi-clock registers, no asynchronous data ports and no handshake paths between independent clock domains.
+
+CDC: clean - 0 violations by inspection.
+
+The synthesis log confirms a single clock domain during the ABC pass. No synchroniser, FIFO or async assertion is required because no crossing exists.

@@ -6,15 +6,15 @@ INFO      RO distance between two devices = 49 bits
 -------------------------------------
 - Report Phase
 -------------------------------------
-MATCH      COUNTER     = 175
+MATCH      COUNTER     = 176
 MISS MATCH COUNTER     = 0
 
 STIMULUS
   RO known answers       = 8
   arbiter known answers  = 5
   syndrome known answers = 5
-  checks performed       = 175
-  checks matched         = 175
+  checks performed       = 176
+  checks matched         = 176
   checks mismatched      = 0
   handshake observations = 54501
   handshake violations   = 0
@@ -37,6 +37,4 @@ GATES                        have   need   ok
   handshake violations      0      0   yes
 
 RESULT                 = PASS
-tb_siliconroot_puf.sv:1172: $finish called at 545110000 (1ps)
-
-exit status: compile 0, run 0
+tb_siliconroot_puf.sv:1209: $finish called at 545110000 (1ps)

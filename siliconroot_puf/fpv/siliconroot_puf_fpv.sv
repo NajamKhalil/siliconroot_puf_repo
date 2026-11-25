@@ -47,8 +47,9 @@
 //
 //                Icarus Verilog executes it during simulation, so the
 //                  rules are checked against the running design.
-//                yosys turns it into a $assert cell, and its SAT solver
-//                  proves it, which is what fpv/fpv_puf_auth.ys does.
+//                yosys turns it into a $assert cell, which is the form a
+//                  proof script would consume. No proof script is shipped;
+//                  this file is compiled and checked in simulation only.
 //                Verible parses it, so the file is known to be
 //                  syntactically well formed.
 //
@@ -61,14 +62,17 @@
 //
 //                  a |-> b        is written as   !a || b
 //
-//              Every property below carries its name as the label of the
-//              assertion, so a failing property names itself.
+//              Every property is named in the comment immediately above it;
+//              Icarus reports the source line, so the name is still easy to
+//              find when an assertion fails.
 //
-//              NOTHING HERE IS PROVEN BY THE PROOF OF THE WHOLE DESIGN.
-//              The proof in fpv/fpv_puf_auth.ys covers the comparator and
-//              nothing else. The properties of the command sequencer and of
-//              the decoder are checked by running them, not by proving
-//              them. The verification report says which is which.
+//              NOTHING HERE IS PROVEN AS SHIPPED. There is no proof harness
+//              or .ys script in fpv/, and these modules are not instantiated
+//              by the delivered RTL. Compile with +define+INCLUDE_FPV to
+//              check them for syntax and to attach them in a separate proof
+//              harness. Until then the sequencer and decoder rules are
+//              checked dynamically by tb_siliconroot_puf.sv, and formal
+//              coverage is recorded as not done in the verification report.
 // `default_nettype none
 
 `ifdef INCLUDE_FPV
@@ -177,7 +181,7 @@ module puf_top_props (
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && cmd_valid_i_d && cmd_ready_o_d) begin
-      a_cmd_held: assert (cmd_q == cmd_i_d && arg_q == arg_i_d);
+      assert (cmd_q == cmd_i_d && arg_q == arg_i_d);
     end
   end
 
@@ -192,7 +196,7 @@ module puf_top_props (
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && cmd_valid_i_d && !cmd_ready_o_d) begin
-      a_cmd_stable: assert (cmd_i == cmd_i_d && arg_i == arg_i_d);
+      assert (cmd_i == cmd_i_d && arg_i == arg_i_d);
     end
   end
 
@@ -201,7 +205,7 @@ module puf_top_props (
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && done_o_d) begin
-      a_done_pulse: assert (!done_o);
+      assert (!done_o);
     end
   end
 
@@ -211,7 +215,7 @@ module puf_top_props (
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && done_o) begin
-      a_done_from_fin: assert (state_q_d == S_FIN);
+      assert (state_q_d == S_FIN);
     end
   end
 
@@ -221,7 +225,7 @@ module puf_top_props (
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && state_q_d == S_FIN) begin
-      a_fin_is_short: assert (state_q == S_IDLE);
+      assert (state_q == S_IDLE);
     end
   end
 
@@ -230,7 +234,7 @@ module puf_top_props (
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && state_q_d != S_IDLE && state_q_d != S_FIN) begin
-      a_ready_only_when_idle: assert (!cmd_ready_o);
+      assert (!cmd_ready_o);
     end
   end
 
@@ -240,7 +244,7 @@ module puf_top_props (
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && state_q != S_IDLE) begin
-      a_cmd_required: assert (seen_q);
+      assert (seen_q);
     end
   end
 
@@ -249,7 +253,7 @@ module puf_top_props (
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && cmd_valid_i_d && cmd_ready_o_d) begin
-      a_err_cleared: assert (!err_o);
+      assert (!err_o);
     end
   end
 
@@ -268,22 +272,22 @@ module puf_top_props (
 
   always_ff @(posedge clk_i) begin
     if (rst_ni) begin
-      a_start_exclusive: assert (start_cnt_c <= 3'd1);
+      assert (start_cnt_c <= 3'd1);
     end
     if (rst_ni && arb_start_c_d) begin
-      a_arb_start_1cyc: assert (!arb_start_c);
+      assert (!arb_start_c);
     end
     if (rst_ni && ro_start_c_d) begin
-      a_ro_start_1cyc: assert (!ro_start_c);
+      assert (!ro_start_c);
     end
     if (rst_ni && key_start_c_d) begin
-      a_key_start_1cyc: assert (!key_start_c);
+      assert (!key_start_c);
     end
     if (rst_ni && arb_cmp_start_c_d) begin
-      a_arb_cmp_start_1cyc: assert (!arb_cmp_start_c);
+      assert (!arb_cmp_start_c);
     end
     if (rst_ni && ro_cmp_start_c_d) begin
-      a_ro_cmp_start_1cyc: assert (!ro_cmp_start_c);
+      assert (!ro_cmp_start_c);
     end
   end
 
@@ -332,7 +336,7 @@ module puf_auth_props #(
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && done_o) begin
-      a_dist_bound: assert (dist_o <= RESP_V);
+      assert (dist_o <= RESP_V);
     end
   end
 
@@ -342,7 +346,7 @@ module puf_auth_props #(
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && done_o) begin
-      a_ok_follows_dist: assert (ok_o == (dist_o <= TOL_V));
+      assert (ok_o == (dist_o <= TOL_V));
     end
   end
 
@@ -352,7 +356,7 @@ module puf_auth_props #(
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && done_o_d) begin
-      a_verdict_held: assert (ok_o == ok_o_d && dist_o == dist_o_d);
+      assert (ok_o == ok_o_d && dist_o == dist_o_d);
     end
   end
 
@@ -361,7 +365,7 @@ module puf_auth_props #(
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && done_o_d) begin
-      a_done_pulse: assert (!done_o);
+      assert (!done_o);
     end
   end
 
@@ -399,7 +403,7 @@ module puf_auth_equiv_props #(
 
   always_ff @(posedge clk_i) begin
     if (rst_ni && done_i) begin
-      a_dist_is_popcount: assert (dist_i == pc_wide(diff_i));
+      assert (dist_i == pc_wide(diff_i));
     end
   end
 
@@ -467,7 +471,7 @@ module puf_bch_dec_props #(
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && state_q_d == S_VCMP) begin
-      a_fail_on_overflow: assert (fail_q == ((!vchk_ok_c_d)
+      assert (fail_q == ((!vchk_ok_c_d)
                                              || (bm_l_q_d > TOL_L)
                                              || (err_cnt_q_d > TOL_C)));
     end
@@ -479,7 +483,7 @@ module puf_bch_dec_props #(
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && state_q_d == S_DONE) begin
-      a_fail_o_follows_q: assert (fail_o == fail_q_d);
+      assert (fail_o == fail_q_d);
     end
   end
 
@@ -489,7 +493,7 @@ module puf_bch_dec_props #(
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && state_q_d == S_DONE && !fail_q_d) begin
-      a_correction_bounded: assert (err_cnt_q <= TOL_C);
+      assert (err_cnt_q <= TOL_C);
     end
   end
 
@@ -498,12 +502,12 @@ module puf_bch_dec_props #(
   // -----------------------------------------------------------------------
   always_ff @(posedge clk_i) begin
     if (rst_ni && done_o_d) begin
-      a_done_pulse: assert (!done_o);
+      assert (!done_o);
     end
   end
 
 endmodule : puf_bch_dec_props
 
-`endif : INCLUDE_FPV
+`endif // INCLUDE_FPV
 
 `default_nettype wire

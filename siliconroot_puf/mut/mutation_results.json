@@ -1,17 +1,17 @@
 {
   "mutants": 29,
-  "killed": 28,
-  "survived": 1,
-  "wall_seconds": 86.6,
+  "killed": 29,
+  "survived": 0,
+  "wall_seconds": 152.9,
   "results": [
     {
       "id": "M01",
-      "desc": "gf_mul reduces with x^7+x^3+x+1 instead of x^7+x^3+1",
+      "desc": "gf_mul folds bit 11 with x^7+x^3+x+1 instead of x^7+x^3+1",
       "file": "puf_pkg.sv",
-      "status": "SURVIVED",
-      "first_failure": "",
-      "verdict": "PASS",
-      "mismatches": 0,
+      "status": "KILLED",
+      "first_failure": "gf_mul matches the field product over all 128x128 pairs",
+      "verdict": "FAIL",
+      "mismatches": 22,
       "finish_ps": 545110000
     },
     {
@@ -249,9 +249,9 @@
       "desc": "the live reduction step of gf_mul folds with the wrong polynomial",
       "file": "puf_pkg.sv",
       "status": "KILLED",
-      "first_failure": "the decoder returned the original word",
+      "first_failure": "gf_mul matches the field product over all 128x128 pairs",
       "verdict": "FAIL",
-      "mismatches": 20,
+      "mismatches": 21,
       "finish_ps": 545110000
     },
     {

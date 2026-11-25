@@ -38,9 +38,9 @@ DEFAULT_OUT = os.path.join(HERE, "mutation_results.json")
 # ---------------------------------------------------------------------------
 MUTANTS = [
     ("M01", "puf_pkg.sv",
-     "gf_mul reduces with x^7+x^3+x+1 instead of x^7+x^3+1",
-     "      t = 14'h089 << 6;    p = p[13] ? (p ^ t) : p;",
-     "      t = 14'h08B << 6;    p = p[13] ? (p ^ t) : p;"),
+     "gf_mul folds bit 11 with x^7+x^3+x+1 instead of x^7+x^3+1",
+     "      t = 14'h089 << 4;    p = p[11] ? (p ^ t) : p;",
+     "      t = 14'h08B << 4;    p = p[11] ? (p ^ t) : p;"),
 
     ("M02", "puf_pkg.sv",
      "gf_sqr drops the a[6] term of the squared bit 1",
